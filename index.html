@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<title>LaMetric Messenger</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<style>
+		.top-buffer { margin-top: 40px; }
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script>
+			function setCookie(cname, cvalue, exdays) {
+			    var d = new Date();
+			    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+			    var expires = "expires="+d.toUTCString();
+			    document.cookie = cname + "=" + cvalue + "; " + expires;
+			}
+
+			function getCookie(cname) {
+			    var name = cname + "=";
+			    var ca = document.cookie.split(';');
+			    for(var i=0; i<ca.length; i++) {
+			        var c = ca[i];
+			        while (c.charAt(0)==' ') c = c.substring(1);
+			        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+			    }
+			    return "";
+			}
+
+			$(document).ready(function () {
+				$("#Send_button").click(function () {
+					setCookie("access_token", $("#access_token").val(), 3)
+					setCookie("dev_url", $("#dev_url").val(), 3)
+
+					var http = new XMLHttpRequest();
+					var params = {"frames": [{"index": 0, "text": $("#message").val(), "icon": null}]};
+					http.open("POST", $("#dev_url").val(), true);
+
+					http.setRequestHeader("Accept", "application/json");
+					http.setRequestHeader("X-Access-Token", $("#access_token").val())
+					http.setRequestHeader("Content-length", params.length);
+					http.setRequestHeader("Cache-control", "no-cache");
+
+					http.onreadystatechange = function() {
+					    if(http.readyState == 4 && http.status == 200) {
+					        $("#alertzone").html('<div class="alert alert-success alert-dismissable" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>200 OK</strong></div>');
+					    }
+					    else if(http.readyState == 4 && http.status == 403) {
+					        $("#alertzone").html('<div class="alert alert-danger alert-dismissable" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>403 Forbidden.</strong> Access-Token correct?</div>');
+					    }
+					    else if(http.readyState == 4 && http.status == 404) {
+					        $("#alertzone").html('<div class="alert alert-danger alert-dismissable" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>404 Not Found.</strong> Developer URL correct?</div>');
+					    }
+					}
+					http.send(JSON.stringify(params));
+				});
+
+				$("#dev_url").val(getCookie("dev_url"));
+				$("#access_token").val(getCookie("access_token"));
+			});
+</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+			    <div class="col-md-2"></div>
+			    <div class="col-md-8"><img src="logo.png" class="img-responsive"></div>
+			    <div class="col-md-2"></div>
+			</div>
+			<div class="row top-buffer"><div id="alertzone"></div></div>
+			<div class="row">
+				<form>
+					<div class="form-group"><label for="dev_url">Developer URL</label><input type="text" class="form-control" id="dev_url" placeholder="Developer URL"></div>
+					<div class="form-group"><label for="access_token">Access Token</label><input type="text" class="form-control" id="access_token" placeholder="Access Token"></div>
+					<div class="form-group"><label for="message">Message</label><input type="text" class="form-control" id="message" placeholder="Type message here"></div>
+					<button type="button" class="btn btn-block btn-default" id="Send_button">Send message</button>
+				</form>
+			</div>	
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</body>
+</html>
