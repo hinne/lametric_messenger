@@ -3,7 +3,8 @@
 		<title>LaMetric Messenger</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<style>
-		.top-buffer { margin-top: 40px; }
+			.top-buffer { margin-top: 40px; }
+			.centered { text-align:center; }
 		</style>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script>
@@ -70,8 +71,10 @@
 				<form>
 					<div class="form-group"><label for="dev_url">Developer URL</label><input type="text" class="form-control" id="dev_url" placeholder="Developer URL"></div>
 					<div class="form-group"><label for="access_token">Access Token</label><input type="text" class="form-control" id="access_token" placeholder="Access Token"></div>
-					<div class="form-group"><label for="message">Message</label><input type="text" class="form-control" id="message" placeholder="Type message here"></div>
-					<button type="button" class="btn btn-block btn-default" id="Send_button">Send message</button>
+					<div class="form-group top-buffer"><label for="message">Message</label><input type="text" class="form-control" id="message" placeholder="Type message here"></div>
+					<div class="centered">
+						<button type="button" class="btn btn-primary" id="Send_button">Send message</button>
+					</div>
 				</form>
 			</div>	
 		</div>
